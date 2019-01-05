@@ -7,7 +7,7 @@ class Gank {
 
   const Gank(this.desc, this.url, this.who, this.pubTime);
 
-  Gank.fromJson(Map<String, dynamic> json)
+   Gank.fromJson(Map<String, dynamic> json)
       : desc = json['desc'],
         url = json['url'],
         who = json['who'],
