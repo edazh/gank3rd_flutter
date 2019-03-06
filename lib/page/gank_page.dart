@@ -1,9 +1,8 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gank3rd/model/gank.dart';
-import 'dart:convert';
-import '../api/api.dart';
+import '../api/gank_service.dart';
 
 class GankPage extends StatefulWidget {
   @override
@@ -35,37 +34,10 @@ class _GankPageState extends State<GankPage> {
       onRefresh: _initGanks,
       child: _gankList.isEmpty
           ? Center(child: CircularProgressIndicator())
-          : _buildGankList(),
-    );
-  }
-
-  //Gank列表
-  Widget _buildGankList() {
-    return ListView.builder(
-      itemCount: _gankList.length + 1,
-      physics: const AlwaysScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        if (index == _gankList.length) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _isLoading
-                    ? Container(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : Icon(Icons.arrow_upward, size: 16),
-                SizedBox(width: 8),
-                Text(_isLoading ? '正在加载' : '上拉加载更多'),
-              ],
+          : GankList(
+              ganks: _gankList,
+              isLoading: _isLoading,
             ),
-          );
-        }
-        return GankTile(_gankList[index]);
-      },
     );
   }
 
@@ -87,10 +59,43 @@ class _GankPageState extends State<GankPage> {
   }
 
   Future<List<Gank>> _fetchRandomGanks() async {
-    Response response = await Api.get('/random/data/Android/2');
-    Result result = Result.fromJson(response.data);
-    print(jsonEncode(result));
-    return result.error ? null : result.ganks;
+    final response = await dio.get('/random/data/Android/20');
+    return Result.fromJson(response.data).ganks;
+  }
+}
+
+class GankList extends StatelessWidget {
+  const GankList({Key key, this.ganks, this.isLoading}) : super(key: key);
+  final List<Gank> ganks;
+  final bool isLoading;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: ganks.length + 1,
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        if (index == ganks.length) {
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                isLoading
+                    ? Container(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : Icon(Icons.arrow_upward, size: 16),
+                SizedBox(width: 8),
+                Text(isLoading ? '正在加载' : '上拉加载更多'),
+              ],
+            ),
+          );
+        }
+        return GankTile(ganks[index]);
+      },
+    );
   }
 }
 
@@ -101,7 +106,6 @@ class GankTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.parse(gank.pubTime);
-    // DateFormat();
     String dateString =
         '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}';
     Widget _gankTile = ListTile(

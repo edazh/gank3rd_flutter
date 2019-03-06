@@ -4,7 +4,7 @@ import 'package:gank3rd/widget/gank_theme.dart';
 import './gank_page.dart';
 import './read_page.dart';
 import './weal_page.dart';
-
+import '../api/gank_service.dart';
 class GankApp extends StatefulWidget {
   @override
   _GankAppState createState() => _GankAppState();
@@ -21,6 +21,8 @@ class _GankAppState extends State<GankApp> {
     _pages.add(GankPage());
     _pages.add(ReadPage());
     _pages.add(WealPage());
+    dio.get("/random/data/Android/20");
+    print(dio);
   }
 
   @override

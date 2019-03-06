@@ -7,10 +7,10 @@ class Gank {
   const Gank(this.desc, this.url, this.who, this.pubTime);
 
   Gank.fromJson(Map<String, dynamic> json)
-      : desc = json['desc'],
-        url = json['url'],
-        who = json['who'],
-        pubTime = json['publishedAt'];
+      : desc = json['desc'] as String,
+        url = json['url'] as String,
+        who = json['who'] as String,
+        pubTime = json['publishedAt'] as String;
   Map<String, dynamic> toJson() =>
       {'desc': desc, 'url': url, 'who': who, 'publishedAt': pubTime};
 }

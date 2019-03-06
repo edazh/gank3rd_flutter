@@ -35,7 +35,7 @@ packages:
       name: cookie_jar
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.7"
+    version: "1.0.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -49,7 +49,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.13"
+    version: "2.0.15"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -60,13 +60,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  intl:
-    dependency: "direct main"
-    description:
-      name: intl
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.15.7"
   matcher:
     dependency: transitive
     description:
@@ -88,6 +81,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.2"
+  pedantic:
+    dependency: transitive
+    description:
+      name: pedantic
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.5.0"
   quiver:
     dependency: transitive
     description:
@@ -106,14 +106,7 @@ packages:
       name: source_span
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.4.1"
-  sqflite:
-    dependency: "direct main"
-    description:
-      name: sqflite
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.13.0+1"
+    version: "1.5.4"
   stack_trace:
     dependency: transitive
     description:
@@ -135,27 +128,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
-  synchronized:
-    dependency: transitive
-    description:
-      name: synchronized
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.5.3+2"
   term_glyph:
     dependency: transitive
     description:
       name: term_glyph
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.1"
+    version: "1.1.0"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.2"
   typed_data:
     dependency: transitive
     description:
@@ -171,4 +157,4 @@ packages:
     source: hosted
     version: "2.0.8"
 sdks:
-  dart: ">=2.0.0 <3.0.0"
+  dart: ">=2.1.1-dev.0.0 <3.0.0"
