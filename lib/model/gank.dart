@@ -15,14 +15,18 @@ class Gank {
       {'desc': desc, 'url': url, 'who': who, 'publishedAt': pubTime};
 }
 
-class Result {
-  final bool error;
-  final List<Gank> ganks;
-  Result.fromJson(Map<String, dynamic> json)
-      : ganks = (json['results'] as List)
-            .map((item) => Gank.fromJson(item))
-            .toList(),
-        error = json['error'];
-
-  Map<String, dynamic> toJson() => {'error': error, 'results': ganks};
+/*
+ *  干货类型
+ */
+enum GankType {
+  // 福利
+  weal,
+  android,
+  ios,
+  // 休息视频
+  video,
+  // 拓展资源
+  resource,
+  // 前端
+  frontend
 }

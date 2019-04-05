@@ -12,6 +12,7 @@ class GankTheme {
       primaryColorDark: ThemeConfig.primaryDark,
       primaryColorLight: ThemeConfig.primaryLight,
       dividerColor:ThemeConfig.divider,
+      splashFactory: InkRipple.splashFactory,
     );
   }
 }

@@ -1,8 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:gank3rd/model/gank.dart';
-import '../api/gank_service.dart';
+
+final List<Tab> _gankTabs = <Tab>[
+  Tab(text: 'Android'),
+  Tab(text: 'iOS'),
+  Tab(text: '前端'),
+  Tab(text: '拓展资源'),
+  Tab(text: '休息视频'),
+];
 
 class GankPage extends StatefulWidget {
   @override
@@ -10,115 +15,127 @@ class GankPage extends StatefulWidget {
 }
 
 class _GankPageState extends State<GankPage> {
-  final List<Gank> _gankList = [];
-  bool _isLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    _initGanks();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      notificationPredicate: (ScrollNotification notification) {
-        if ((notification is UserScrollNotification) &&
-            notification.direction == ScrollDirection.reverse &&
-            notification.metrics.atEdge &&
-            !_isLoading) {
-          print('到底了');
-          _loadMore();
-        }
-        return defaultScrollNotificationPredicate(notification);
-      },
-      onRefresh: _initGanks,
-      child: _gankList.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : GankList(
-              ganks: _gankList,
-              isLoading: _isLoading,
+    print(_gankTabs[0].text);
+    return DefaultTabController(
+      length: _gankTabs.length,
+      initialIndex: 0,
+      child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              child: SliverSafeArea(
+                top: false,
+                sliver: SliverAppBar(
+                  title: Text('Gank'),
+                  pinned: true,
+                  floating: true,
+                  forceElevated: innerBoxIsScrolled,
+                  bottom: TabBar(
+                    isScrollable: true,
+                    tabs: _gankTabs,
+                  ),
+                ),
+              ),
             ),
-    );
-  }
-
-  Future _initGanks() async {
-    print('init');
-    List<Gank> ganks = await _fetchRandomGanks();
-    _gankList.clear();
-    setState(() => _gankList.addAll(ganks));
-  }
-
-  Future _loadMore() async {
-    print('正在加载=============$_isLoading');
-    setState(() => _isLoading = true);
-    List<Gank> ganks = await _fetchRandomGanks();
-    setState(() {
-      _isLoading = false;
-      _gankList.addAll(ganks);
-    });
-  }
-
-  Future<List<Gank>> _fetchRandomGanks() async {
-    final response = await dio.get('/random/data/Android/20');
-    return Result.fromJson(response.data).ganks;
-  }
-}
-
-class GankList extends StatelessWidget {
-  const GankList({Key key, this.ganks, this.isLoading}) : super(key: key);
-  final List<Gank> ganks;
-  final bool isLoading;
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: ganks.length + 1,
-      physics: const AlwaysScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        if (index == ganks.length) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                isLoading
-                    ? Container(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : Icon(Icons.arrow_upward, size: 16),
-                SizedBox(width: 8),
-                Text(isLoading ? '正在加载' : '上拉加载更多'),
-              ],
-            ),
-          );
-        }
-        return GankTile(ganks[index]);
-      },
-    );
-  }
-}
-
-//Gank列表项目
-class GankTile extends StatelessWidget {
-  final Gank gank;
-  const GankTile(this.gank);
-  @override
-  Widget build(BuildContext context) {
-    DateTime date = DateTime.parse(gank.pubTime);
-    String dateString =
-        '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}';
-    Widget _gankTile = ListTile(
-      title: Text(gank.desc),
-      subtitle: Row(
-        children: <Widget>[
-          Text(gank.who ?? '匿名用户'),
-          SizedBox(width: 8.0),
-          Text(dateString),
-        ],
+          ];
+        },
+        body: TabBarView(
+          dragStartBehavior: DragStartBehavior.down,
+          children: _gankTabs.map((Tab tab) {
+            return SafeArea(
+              top: false,
+              bottom: false,
+              child: Builder(
+                builder: (BuildContext context) {
+                  return CustomScrollView(
+                    key: PageStorageKey<String>(tab.text),
+                    slivers: <Widget>[
+                      SliverOverlapInjector(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context),
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text('Item $index'),
+                            );
+                          },
+                          childCount: 30,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          }).toList(),
+        ),
       ),
-      onTap: () => print('tap gank item'),
     );
-    return _gankTile;
   }
+}
+
+class GankListBuilder extends StatefulWidget {
+  @override
+  _GankListBuilderState createState() => _GankListBuilderState();
+}
+
+class _GankListBuilderState extends State<GankListBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class GankList extends StatefulWidget {
+  final String category;
+  const GankList({Key key, @required this.category})
+      : assert(category != null),
+        super(key: key);
+  @override
+  _GankListState createState() => _GankListState();
+}
+
+class _GankListState extends State<GankList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        ListTile(
+          title: Text(widget.category),
+          onTap: () {},
+        ),
+        ListTile(
+          title: Text(widget.category),
+          onTap: () {},
+        ),
+      ],
+    );
+  }
+}
+
+class GankHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+  const GankHeaderDelegate({this.tabBar});
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    // TODO: implement build
+    return tabBar;
+  }
+
+  @override
+  // TODO: implement maxExtent
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  // TODO: implement minExtent
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
 }
