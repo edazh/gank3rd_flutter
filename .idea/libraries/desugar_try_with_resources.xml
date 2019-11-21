@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="desugar_try_with_resources">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/app/intermediates/processing-tools/runtime-deps/debug/desugar_try_with_resources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

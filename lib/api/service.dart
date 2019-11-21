@@ -12,7 +12,7 @@ final Dio dio = Dio(_options)
         return options;
       },
       onResponse: (Response response) {
-        print(response.data);
+        // print(response.data);
         return response;
       },
       onError: (DioError error) {

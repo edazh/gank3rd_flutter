@@ -24,7 +24,6 @@ class _GankAppState extends State<GankApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(_bottomNavItems[0]);
     return MaterialApp(
       home: Scaffold(
         body: _pages[_currentIndex],

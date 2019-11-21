@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/gank3rd.iml" filepath="$PROJECT_DIR$/gank3rd.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gank3rd_android.iml" filepath="$PROJECT_DIR$/gank3rd_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/build/app/generated/source/buildConfig/buildConfig.iml" filepath="$PROJECT_DIR$/build/app/generated/source/buildConfig/buildConfig.iml" />
+      <module fileurl="file://$PROJECT_DIR$/build/flutter_webview_plugin/generated/source/buildConfig/buildConfig1.iml" filepath="$PROJECT_DIR$/build/flutter_webview_plugin/generated/source/buildConfig/buildConfig1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/build/flutter_webview_plugin/intermediates/manifests/full/debug/debug.iml" filepath="$PROJECT_DIR$/build/flutter_webview_plugin/intermediates/manifests/full/debug/debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/app/src/main/main.iml" filepath="$PROJECT_DIR$/android/app/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/build/flutter_webview_plugin/generated/source/r/r.iml" filepath="$PROJECT_DIR$/build/flutter_webview_plugin/generated/source/r/r.iml" />
     </modules>
   </component>
 </project>

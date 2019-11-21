@@ -7,9 +7,7 @@ class ReadPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          CircularProgressIndicator(
-
-          ),
+          CircularProgressIndicator(),
           Text(
             '闲读',
             style: TextStyle(fontSize: 32.0),

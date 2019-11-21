@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gank3rd/model/gank.dart';
+import 'package:gank3rd/page/brower_page.dart';
+import 'package:gank3rd/api/api.dart';
 
 final List<Tab> _gankTabs = <Tab>[
   Tab(text: 'Android'),
@@ -15,9 +18,25 @@ class GankPage extends StatefulWidget {
 }
 
 class _GankPageState extends State<GankPage> {
+  final List<Gank> _gankList = [];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('didChangeDependencies');
+    random().then((List<Gank> ganks) {
+      setState(() {
+        _gankList.addAll(ganks);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(_gankTabs[0].text);
     return DefaultTabController(
       length: _gankTabs.length,
       initialIndex: 0,
@@ -60,11 +79,9 @@ class _GankPageState extends State<GankPage> {
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            return ListTile(
-                              title: Text('Item $index'),
-                            );
+                            return GankTile(gank: _gankList[index]);
                           },
-                          childCount: 30,
+                          childCount: _gankList.length,
                         ),
                       ),
                     ],
@@ -79,15 +96,27 @@ class _GankPageState extends State<GankPage> {
   }
 }
 
-class GankListBuilder extends StatefulWidget {
-  @override
-  _GankListBuilderState createState() => _GankListBuilderState();
-}
+class GankTile extends StatelessWidget {
+  final Gank gank;
+  GankTile({Key key, this.gank}) : super(key: key);
 
-class _GankListBuilderState extends State<GankListBuilder> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListTile(
+      leading: Icon(
+        Icons.android,
+        color: Colors.lightGreen,
+      ),
+      title: Text(gank.desc ?? ''),
+      subtitle: Text(gank.who ?? '佚名'),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => BrowerPage(
+                  url: gank.url,
+                  title: gank.desc,
+                )));
+      },
+    );
   }
 }
 
@@ -124,16 +153,13 @@ class GankHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    // TODO: implement build
     return tabBar;
   }
 
   @override
-  // TODO: implement maxExtent
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  // TODO: implement minExtent
   double get minExtent => tabBar.preferredSize.height;
 
   @override
